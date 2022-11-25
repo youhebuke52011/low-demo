@@ -1,0 +1,92 @@
+id: datas
+type: PageHeaderMenu
+properties:
+  title: Datas 
+  logo:
+        src: https://i.postimg.cc/Qtn1P5zW/simbiose-Logo.png
+        style:
+          width: 10px;
+          margin: 10px 15px;
+          height: 100px;  
+layout:
+  contentJustify: center
+  contentGutter: 16
+areas:
+  content:
+    blocks:
+      - id: DateRangeSelectorCard
+        type: Card
+        layout:
+          span: 16 
+        blocks:
+        - id: DateRangeSelectorBlock
+          type: DateRangeSelector
+          properties:
+            disabledDates:
+              dates: []
+              ranges: []
+            format: DD MMMM YYYY
+            label:
+              hasFeedback: false
+            placeholder:
+              - Start Date
+              - End Date
+      - id: DateSelectorCard
+        type: Card
+        layout:
+          span: 16 
+        blocks:
+        - id: DateSelectorBlock
+          type: DateSelector
+          properties:
+            disabledDates:
+              dates: []
+              ranges: []
+            label:
+              align: left
+              hasFeedback: false
+            format: DD MMMM YYYY
+            suffixIcon: CalendarTwoTone
+      - id: DateTimeSelectorCard
+        type: Card
+        layout:
+          span: 16 
+        blocks:
+        - id: DateTimeSelectorBlock
+          type: DateTimeSelector
+          properties:
+            disabledDates:
+              dates: []
+              ranges: []
+            format: DD MMMM YYYY
+      - id: MonthSelectorCard
+        type: Card
+        layout:
+          span: 16 
+        blocks:
+        - id: MonthSelectorBlock
+          type: MonthSelector
+          properties:
+            disabledDates:
+              dates: []
+              ranges: []
+            format: MMMM YYYY
+      - id: WeekSelectorCard
+        type: Card
+        layout:
+          span: 16 
+        blocks:
+        - id: WeekSelectorBlock
+          type: WeekSelector
+          properties:
+            disabledDates:
+              dates: []
+              ranges: []
+            format: wo-YYYY
+      - id: PageFooter
+        type: Html
+        properties:
+          html: > 
+            <div style="width: 66%; margin: auto; height: 100px;  background: #6b7d8c;">
+              <p style="margin-top: 20px; padding-top: 40px; font-size: 1.2em; text-align: center; color: white;">Desenvolvido por equipe &copy;<b>Simbiose Ventures</b></p>
+            </div>  

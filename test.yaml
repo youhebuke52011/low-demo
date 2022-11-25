@@ -1,0 +1,106 @@
+id: test
+type: Context
+style:
+  background: '#ababab'
+layout:
+  contentAlign: center
+requests:
+  - id: contacts
+    type: MongoDBAggregation
+    connectionId: meta # Id of the connection defined in the lowdefy.yaml file.
+    properties:
+      pipeline:
+        - $sort:
+            age: 1
+events:
+  onInitAsync:
+    - id: go_get_employees
+      type: Request
+      params: get_employees # Here we refer to the get_employees id.
+  onClick:
+    - id: pushItem
+      type: CallMethod
+      params:
+        blockId: contacts
+        method: pushItem
+    - id: unshiftItem
+      type: CallMethod
+      params:
+        blockId: contacts
+        method: unshiftItem
+    - id: removeItem
+      type: CallMethod
+      params:
+        blockId: contacts
+        method: removeItem
+        args:
+          - 1
+blocks: 
+  - id: contacts
+    type: ControlledList
+    properties:
+      addItemButton:
+        type: primary
+      footerStyle: dss
+    blocks:
+      - id: contacts.$.first_name
+        type: TextInput
+        layout:
+          span: 12
+        required: true
+        properties:
+          title: First Name
+          label:
+            span: 10
+            align: right
+      - id: contacts.$.last_name
+        type: TextInput
+        layout:
+          span: 12
+        required: true
+        properties:
+          title: Last Name
+          label:
+            span: 10
+            align: right
+      - id: contacts.$.date_of_birth
+        type: DateSelector
+        layout:
+          span: 12
+        required: true
+        properties:
+          title: Date of Birth
+          label:
+            span: 10
+            align: right
+      - id: contacts.$.email
+        type: TextInput
+        layout:
+          span: 12
+        required: true
+        properties:
+          title: Email address
+          label:
+            span: 10
+            align: right
+      - id: contacts.$.phone_number
+        type: TextInput
+        layout:
+          span: 12
+        properties:
+          title: Phone number
+          label:
+            span: 10
+            align: right
+      - id: contacts.$.preference
+        type: ButtonSelector
+        layout:
+          span: 12
+        properties:
+          title: Preference
+          label:
+            span: 10
+            align: right
+          options:
+            - Phone
+            - Email

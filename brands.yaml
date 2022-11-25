@@ -1,0 +1,91 @@
+id: brands
+type: PageSiderMenu
+properties:
+  title: Brands
+requests:
+  - id: get_brands
+    type: MongoDBAggregation # MongoDb Aggregation to get the table data.
+    connectionId: brands # Id of the connection defined in the lowdefy.yaml file.
+    properties:
+      pipeline:
+        - $sort:
+            name: 1 # Sort results alphabetically according to the name.
+events:
+  # A list of actions that gets completed each time a user visits this page.
+  onEnter:
+    - id: fetch_brands
+      type: Request
+      params: get_brands # Fetch the brands data query each time a user enter this page.
+    - id: set_brands
+      type: SetState
+      params:
+        # We need to set a value in state with the same key as the id of the List block that will
+        # show all the brands (brands_list). The List block will render a content area for every item
+        # in that array in state.
+        brands_list:
+          _request: get_brands
+areas:
+  header:
+    blocks:
+      - _ref: view_github.yaml
+  content:
+    blocks:
+      - id: title # Create a Title block
+        type: Title
+        # Css flex properties are used to lay out the title and new brand button.
+        # If a flex property is set, the default span of 24 is not set.
+        # If the grow (flex-grow) property is a positive number, the block will expand to
+        # take up the available space in the row. If more than one block with the grow property
+        # are in the same row, they will expand together to share the available space in the row.
+        # If a block has a grow property of 0, it will only occupy the space it takes due to
+        # its content size. See https://docs.lowdefy.com/layout for more information.
+        layout:
+          grow: 1 # Because the grow of the title is 1, it will expand to fill all the available space.
+        properties:
+          content: Brands # The title's text.
+      - id: new_brand_button # Create a Button block to add a new brand.
+        type: Button
+        layout:
+          grow: 0 # Because the grow of the button is 0, it will not expand but remain in the same row as the title block.
+        properties:
+          title: New Brand # Button text.
+          icon: PlusOutlined # Ant Design icon on the button.
+        events:
+          onClick: # All the actions to complete when the button is clicked.
+            - id: link_to_new_brand # Link to the page where we will add a new brand.
+              type: Link
+              params:
+                pageId: new-brand # The page id of the new brand page.
+      # A List block to render the following brands.
+      # The list block will render a content area all items in the "brands_list" array in state.
+      # The "brands_list" array is populated by the "set_brands" onEnter action.
+      - id: brands_list
+        type: List
+        blocks:
+          - id: brands_list.$.container # Wrap all the blocks for a brands item in a box.
+            type: Box
+            style:
+              background: '#fff' # Give the box a white background and some spacing.
+              margin: 10
+              padding: 10
+            blocks:
+              - id: brands_list.$.name # Show the item name as a title in the list.
+                type: Title
+                properties:
+                  content:
+                    _state: brands_list.$.name
+                  level: 3
+              - id: brands_list.$.description # Show the item description as a paragraph in the list.
+                type: Paragraph
+                properties:
+                  content:
+                    _state: brands_list.$.description
+            events:
+              onClick:
+                - id: link_to_edit_brand # Link to the page where we will edit the clicked brand.
+                  type: Link
+                  params:
+                    pageId: edit-brand # The page id of the edit brand page.
+                    urlQuery:
+                      brand_id:
+                        _state: brands_list.$._id # Set the brand_id in the url query on the edit-brand page to the _id field of the clicked list item.

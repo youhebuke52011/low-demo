@@ -1,0 +1,106 @@
+id: template
+type: PageSiderMenu
+properties:
+  title: Outro Template
+  logo:
+        src: https://i.postimg.cc/Qtn1P5zW/simbiose-Logo.png
+        style:
+          width: 10px;
+          margin: 10px 15px;
+          height: 100px;
+  breadcrumb:
+    list: []
+layout:
+  contentJustify: center 
+blocks:
+  - id: content_card
+    type: Card
+    layout:
+      size: 800
+      contentGutter: 16 
+    blocks:
+      - id: page_heading
+        type: Title
+        properties:
+          content: Orientação do conteúdo 
+          level: 3
+      - id: PageHCFtitle
+        type: Title
+        layout:
+          offset: 4
+        properties:
+          content: PageHCF
+      - id: PageHCFimg
+        type: Img
+        layout:
+          offset: 4
+        properties:
+          src: https://i.postimg.cc/v83LCTj7/l1.png   
+      - id: PageHCSFtitle
+        type: Title
+        layout:
+          offset: 4
+        properties:
+          content: PageHCSF   
+      - id: PageHCSFimg
+        type: Img
+        layout:
+          offset: 4
+        properties:
+          src: https://i.postimg.cc/Fszgvm5M/l2.png
+      - id: PageHeaderMenuTitle
+        type: Title
+        layout:
+          offset: 4
+        properties:
+          content: PageHeaderMenu   
+      - id: PageHeaderMenuImg
+        type: Img
+        layout:
+          offset: 4
+        properties:
+          src: https://i.postimg.cc/xTZGT79c/l3.png
+      - id: PageHSCFtitle
+        type: Title
+        layout:
+          offset: 4
+        properties:
+          content: PageHSCF
+      - id: PageHSCFimg
+        type: Img
+        layout:
+          offset: 4
+        properties:
+          src: https://i.postimg.cc/LstjD8L1/l4.png
+      - id: PageSHCFtitle
+        type: Title
+        layout:
+          offset: 4
+        properties:
+          content: PageSHCF  
+      - id: PageSHCFimg
+        type: Img
+        layout:
+          offset: 4
+        properties:
+          src: https://i.postimg.cc/rpXS5r0T/l5.png
+      - id: PageSiderMenuTitle
+        type: Title
+        layout:
+          offset: 4
+        properties:
+          content: PageSiderMenu
+      - id: PageSiderMenuImg
+        type: Img
+        layout:
+          offset: 4
+          padding-top: 5px
+        properties:
+          src: https://i.postimg.cc/Sxz6XrKV/l6.png
+  - id: PageFooter
+    type: Html
+    properties:
+      html: > 
+        <div style="width: 66%; margin: auto; height: 100px;  background: #6b7d8c;">
+          <p style="margin-top: 20px; padding-top: 40px; font-size: 1.2em; text-align: center; color: white;">Desenvolvido por equipe &copy;<b>Simbiose Ventures</b></p>
+        </div> 

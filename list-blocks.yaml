@@ -1,0 +1,161 @@
+id: list-blocks
+type: PageSiderMenu
+properties:
+  title: List Blocks
+  logo:
+        src: https://i.postimg.cc/Qtn1P5zW/simbiose-Logo.png
+        style:
+          width: 10px;
+          margin: 10px 15px;
+          height: 100px; 
+layout:
+  contentJustify: center
+  contentGutter: 16
+  size: 500
+areas:
+  content:
+        blocks:
+          - id: ListCard
+            type: Card
+            properties:
+              title: List
+            layout:
+              span: 16
+            blocks:
+            - id: todo_input
+              type: TextInput
+              layout:
+                grow: 1
+              properties:
+                label:
+                  disabled: true
+                placeholder: Write something todo...
+            - id: add_item
+              type: Button
+              layout:
+                shrink: 1
+              properties:
+                title: Add item
+                icon: PlusOutlined
+              events:
+                onClick:
+                  - id: add
+                    type: SetState
+                    params:
+                      todos:
+                        _array.concat:
+                          - - _state: todo_input
+                          - _state: todos
+                      todo_input: null
+            - id: todos
+              type: List
+              layout:
+                contentGutter: 16
+              blocks:
+                - id: todos.$
+                  type: TitleInput
+                  layout:
+                    grow: 1
+                  properties:
+                    level: 4
+                - id: remove_item
+                  type: Icon
+                  layout:
+                    shrink: 1
+                  properties:
+                    name: MinusCircleOutlined
+                    size: 18
+                  events:
+                    onClick:
+                      - id: remove
+                        type: CallMethod
+                        messages:
+                          loading: Removendo ...
+                          success: Removido !
+                        params:
+                          blockId: todos
+                          method: removeItem
+                          args:
+                            - _index: 0
+          - id: ControlledListCard
+            type: Card
+            properties:
+              title: ControlledList
+            layout:
+              span: 16
+            blocks:
+            - id: ControlledListBlock
+              type: ControlledList
+              blocks:
+                # - id: contacts.$
+                #   type: TitleInput
+                #   properties:
+                #     level: 1
+                - id: contacts.$.first_name
+                  type: TextInput
+                  layout:
+                    span: 12
+                  required: true
+                  properties:
+                    title: First Name
+                    label:
+                      span: 10
+                      align: right
+                - id: contacts.$.last_name
+                  type: TextInput
+                  layout:
+                    span: 12
+                  required: true
+                  properties:
+                    title: Last Name
+                    label:
+                      span: 10
+                      align: right
+                - id: contacts.$.date_of_birth
+                  type: DateSelector
+                  layout:
+                    span: 12
+                  required: true
+                  properties:
+                    title: Date of Birth
+                    label:
+                      span: 10
+                      align: right
+                - id: contacts.$.email
+                  type: TextInput
+                  layout:
+                    span: 12
+                  required: true
+                  properties:
+                    title: Email address
+                    label:
+                      span: 10
+                      align: right
+                - id: contacts.$.phone_number
+                  type: TextInput
+                  layout:
+                    span: 12
+                  properties:
+                    title: Phone number
+                    label:
+                      span: 10
+                      align: right
+                - id: contacts.$.preference
+                  type: ButtonSelector
+                  layout:
+                    span: 12
+                  properties:
+                    title: Preference
+                    label:
+                      span: 10
+                      align: right
+                    options:
+                      - Phone
+                      - Email  
+          - id: PageFooter
+            type: Html
+            properties:
+              html: > 
+                <div style="width: 66%; margin: auto; height: 100px;  background: #6b7d8c;">
+                  <p style="margin-top: 20px; padding-top: 40px; font-size: 1.2em; text-align: center; color: white;">Desenvolvido por equipe &copy;<b>Simbiose Ventures</b></p>
+                </div> 

@@ -1,0 +1,238 @@
+id: formulario
+type: PageHeaderMenu
+requests:
+  - id: save_data
+    type: GoogleSheetAppendOne
+    connectionId: google_sheet
+    properties:
+      row:
+        ticket_title:
+          _state: ticket_title
+        ticket_type:
+          _state: ticket_type
+        ticket_description:
+          _state: ticket_description
+        confirm_restart:
+          _state: confirm_restart
+        created_date:
+          _date: now
+properties:
+  title: Formulário
+  logo:
+        src: https://i.postimg.cc/Qtn1P5zW/simbiose-Logo.png
+        style:
+          width: 10px;
+          margin: 10px 15px;
+          height: 100px;   
+layout:
+  contentJustify: center 
+blocks:
+  - id: content_card
+    type: Card
+    layout:
+      size: 800
+      contentGutter: 16
+    blocks:
+      - id: block_id
+        type: Avatar
+        properties:
+          title: 
+          src: https://i.postimg.cc/FHMcrxYJ/1580782652276.jpg
+      - id: page_heading
+        type: Title
+        properties:
+          content:
+          level: 3
+      - id: Nome
+        required: true
+        type: TextInput
+        properties:
+          title: TextInput
+          placeholder: Nome
+      - id: email
+        type: TextInput
+        required: true
+        validate:
+          - message: Please enter a email address.
+            status: error
+            pass:
+              _not:
+                _not:
+                  _state: email
+          - message: Please provide a valid email address.
+            status: error
+            pass:
+              _regex: '^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
+        properties:
+          title: TextInput
+          placeholder: email
+      - id: Horários
+        type: DateRangeSelector
+        required: true
+        properties:
+          title: DateRangeSelector
+          disabledDates:
+            dates: []
+            ranges: []
+          placeholder:
+            - Start Date
+            - End Date
+      - id: block_id
+        type: RadioSelector
+        properties:
+          title: 'RadioSelector'
+          options:
+            - label: Sim
+              value: 1
+              disabled: false
+              style: null
+            - label: Não
+              value: 2
+              disabled: false
+              style: null
+      - id: ticket_type
+        required: true
+        type: ButtonSelector
+        properties:
+          title: ButtonSelector
+          options:
+            - Emergência
+            - Ambulatório
+            - Triagem
+      - id: selecione
+        type: Selector
+        properties:
+          placeholder: Número de exames
+          title: Selector
+          options:
+            - Emergência
+            - Ambulatório
+            - Triagem
+      - id: confirm_restart
+        type: ButtonSelector
+        visible: 
+          _eq: 
+            - _state: ticket_type 
+            - Emergência
+        validate:
+          - status: warning
+            message: If you did not restart your device, we will ask you to restart it.
+            pass:
+              _eq:
+                - _state: confirm_restart
+                - Yes
+        properties:
+          title: 'Dependency:'
+          label:
+            colon: false 
+          options:
+            - Yes
+            - No 
+      - id: selecioneT
+        type: MultipleSelector
+        properties:
+          placeholder: Número de exames
+          title: MultipleSelector
+          options:
+            - label: Anamnese inicial
+              value: 1
+              disabled: false
+              filterString: null
+              style: null
+            - label: Hipertensão
+              value: 2
+              disabled: false
+              filterString: null
+              style: null
+            - label: Tuberculose
+              value: 3
+              disabled: false
+              filterString: null
+              style: null        
+      - id: Número_exames
+        type: NumberInput
+        properties:
+          placeholder: Número de exames
+          title: NumberInput
+      - id: block_id
+        type: Alert
+        properties:
+          message: Alerts help to highlight important information
+          title: Alert
+      - id: ticket_description
+        type: TextArea
+        properties:
+          title: TextArea
+      
+      - id: block_id
+        type: S3UploadButton
+        properties:
+          button:
+            icon: UserSwitchOutlined
+            title: S3UploadButton
+      - id: block_id
+        type: Anchor
+        properties:
+          html: <a href="https://simbiose.readme.io/">Lowdefy Website</a>
+          icon: AccountBookOutlined
+          href: https://simbiose.readme.io/password?redirect=/
+          newTab: true
+          strong: true
+          title: Anchor
+      - id: atualizacoes
+        type: Switch
+        layout:
+          offset: 10
+        properties:
+          label:
+            title: Switch
+      - id: Termos_e_Contrato
+        type: CheckboxSwitch 
+        properties:
+          description: CheckboxSwitch
+          label:
+            disabled: true
+      - id: block_id
+        type: DangerousHtml
+        style:
+          align-content: right
+        properties:
+          html: <a href="https://simbiose.readme.io/">DangerousHtml</a>
+      - id: reset_button
+        type: Button
+        layout:
+          span: 12
+        properties:
+          title: Reset
+          block: true 
+          type: default 
+          icon: ClearOutlined
+        events:
+          onClick:
+            - id: reset
+              type: Reset
+      - id: submit_button
+        type: Button
+        layout:
+          span: 12
+        properties:
+          title: Submit
+          block: true
+          type: primary 
+          icon: SaveOutlined
+        events:
+          onClick:
+            - id: validate
+              type: Validate
+            - id: save_data
+              type: Request
+              params: save_data
+            - id: reset
+              type: Reset
+  - id: PageFooter
+    type: Html
+    properties:
+      html: > 
+        <div style="width: 63.3%; margin: auto; height: 100px;  background: #6b7d8c;">
+          <p style="margin-top: 20px; padding-top: 40px; font-size: 1.2em; text-align: center; color: white;">Desenvolvido por equipe &copy;<b>Simbiose Ventures</b></p>
+        </div> 

@@ -1,0 +1,77 @@
+id: datatable
+type: PageHeaderMenu
+properties:
+  logo:
+        src: https://i.postimg.cc/Qtn1P5zW/simbiose-Logo.png
+        style:
+          width: 10px;
+          margin: 10px 15px;
+          height: 100px; 
+  title: Tabelas
+  prefetchPages:
+    - cadastro-funcionario
+layout:
+  contentJustify: center
+areas:
+  content:
+    blocks: 
+      - blocks: 
+          - id: title
+            layout: 
+              flex: "1 1 auto"
+            properties: 
+              content: exemplo de tabela
+            type: Title
+          - events: 
+              onClick: 
+                - id: link_to_cadastro-funcionario
+                  params: cadastro-funcionario
+                  type: Link
+            id: new_user_button
+            layout: 
+              flex: "0 1 auto"
+            properties: 
+              icon: PlusOutlined
+              title: "New User"
+            type: Button
+          - blocks: 
+              - events: 
+                  onRowClick: 
+                    - id: link_to_editar-perfil
+                      params: 
+                        input: 
+                          user_id: 
+                            _event: row._id
+                        pageId: editar-perfil
+                      type: Link
+                id: users_table
+                properties: 
+                  rowData:
+                    - a: zero
+                      b: 000
+                      c: AA
+                    - a: one
+                      b: 111
+                      c: BB
+                    - a: two
+                      b: 222
+                      c: CC
+                  columnDefs:
+                    - field: 'a'
+                    - field: 'b'
+                    - field: 'c'
+                type: AgGridAlpine
+            id: content_card
+            type: Card
+        id: max_width_box
+        layout: 
+          size: 600
+          height: 100
+        type: Box
+      - id: PageFooter
+        type: Html
+        properties:
+          html: > 
+            <div style="width: 66%; margin: auto; height: 100px;  background: #6b7d8c;">
+              <p style="margin-top: 20px; padding-top: 40px; font-size: 1.2em; text-align: center; color: white;">Desenvolvido por equipe &copy;<b>Simbiose Ventures</b></p>
+            </div> 

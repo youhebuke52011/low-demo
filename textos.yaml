@@ -1,0 +1,166 @@
+id: textos
+type: PageHeaderMenu
+events:
+  onInit:
+      - id: single_value
+        type: SetState
+        params:
+          paragraph_input: TEST
+          title_input: TEST2
+requests:
+  - id: save_data
+    type: GoogleSheetAppendOne
+    connectionId: google_sheet
+    properties:
+      row:
+        ticket_title:
+          _state: ticket_title
+        ticket_type:
+          _state: ticket_type
+        ticket_description:
+          _state: ticket_description
+        confirm_restart:
+          _state: confirm_restart
+        created_date:
+          _date: now
+properties:
+  title: Texto 
+  logo:
+        src: https://i.postimg.cc/Qtn1P5zW/simbiose-Logo.png
+        style:
+          width: 10px;
+          margin: 10px 15px;
+          height: 100px;   
+layout:
+  contentJustify: center
+  contentGutter: 16
+areas:
+  content:
+    blocks:
+      - id: AutoCompleteCard
+        type: Card
+        properties:
+          title: AutoComplete
+        layout:
+          span: 16 
+        blocks:
+        - id: AutoCompleteBlock
+          type: AutoComplete
+          properties:
+            autoFocus: true
+            title: Auto Complete Input
+            options:
+            - sunny
+            - rain
+            - storm
+            - sun
+            - rainy
+      - id: ParagraphInputCard
+        type: Card
+        properties:
+          title: ParagraphInput
+        layout:
+          span: 16 
+        blocks:
+        - id: ParagraphInputBlock
+          type: ParagraphInput
+          properties:
+            title: Paragraph Input
+            content: Alo
+      - id: TextAreaCard
+        type: Card
+        properties:
+          title: TextArea
+        layout:
+          span: 16 
+        blocks:
+        - id: TextAreaBlock
+          type: TextArea
+          properties:
+            placeholder: >-
+              Text
+              Area                                                                           
+            rows: 2
+            title: Text Area
+          blocks:
+          - id: test
+            type: ParagraphInput
+      - id: TextInputCard
+        type: Card
+        properties:
+          title: TextInput
+        layout:
+          span: 16 
+        blocks:
+        - id: TextInputBLock
+          type: TextInput
+          properties:
+            placeholder: Text Input
+            suffixIcon: FontSizeOutlined
+            title: Text Input
+      - id: NumberInputCard
+        type: Card
+        properties:
+          title: NumberInput
+        layout:
+          span: 16 
+        blocks:
+        - id: NumberInputBlock
+          type: NumberInput
+          properties:
+            autoFocus: true
+            placeholder: 'Ex: 22'
+            title: Number Input
+      - id: PasswordInputCard
+        type: Card
+        properties:
+          title: PasswordInput
+        layout:
+          span: 16 
+        blocks:
+        - id: PasswordInputBlock
+          type: PasswordInput
+          properties:
+            placeholder: password
+            title: Password Input
+      - id: TitleCard
+        type: Card
+        properties:
+          title: Title
+        layout:
+          span: 16 
+        blocks:
+        - id: TitleBLock
+          type: Title
+          properties:
+            content: A title block.
+      - id: TitleInputCard
+        type: Card
+        properties:
+          title: TitleInput
+        layout:
+          span: 16 
+        blocks:
+        - id: TitleInputBlock
+          type: TitleInput
+      - id: CommentCard
+        type: Card
+        properties:
+          title: Comment
+        layout:
+          span: 16 
+        blocks:
+        - id: CommentBlock
+          type: Comment
+          properties:
+            author: Simbiose Ventures
+            avatar: https://i.postimg.cc/FHMcrxYJ/1580782652276.jpg
+            content: Developers
+            datetime: 13/09/2022
+      - id: PageFooter
+        type: Html
+        properties:
+          html: > 
+            <div style="width: 66%; margin: auto; height: 100px;  background: #6b7d8c;">
+              <p style="margin-top: 20px; padding-top: 40px; font-size: 1.2em; text-align: center; color: white;">Desenvolvido por equipe &copy;<b>Simbiose Ventures</b></p>
+            </div> 

@@ -1,0 +1,115 @@
+id: estatisticas
+type: PageHeaderMenu
+properties:
+  title: Estatísticas
+  logo:
+        src: https://i.postimg.cc/Qtn1P5zW/simbiose-Logo.png
+        style:
+          width: 10px;
+          margin: 10px 15px;
+          height: 100px; 
+layout:
+  contentJustify: center
+  contentGutter: 16
+  size: 500
+areas:
+  content:
+    blocks:
+      - id: BreadcrumbCard
+        type: Card
+        properties:
+          title: Frenquência dos clientes
+        layout:
+          span: 16 
+        blocks:
+          - id: BreadcrumbBlock
+            type: Breadcrumb
+            properties:
+              list:
+                - home
+                - estatísticas
+      - id: EChartCard
+        type: Card
+        properties:
+          title:
+        layout:
+          span: 16 
+        blocks:
+          - id: EChartBlock
+            type: EChart
+            properties:
+              option:
+                xAxis:
+                  type: category
+                  data:
+                    - Mon
+                    - Tue
+                    - Wed
+                    - Thu
+                    - Fri
+                    - Sat
+                    - Sun
+                yAxis:
+                  type: value
+                series:
+                  - type: bar
+                    data:
+                      - 150
+                      - 230
+                      - 224
+                      - 218
+                      - 135
+                      - 147
+                      - 260
+      - id: ProgressCard
+        type: Card
+        properties:
+          title: Progress
+        layout:
+          span: 16 
+        blocks:
+        - id: ProgressBLock
+          type: Progress
+          properties:
+            percent: 30
+      - id: ProgressCard2
+        type: Card
+        properties:
+          title: Progress
+        layout:
+          span: 16 
+        blocks:
+        - id: genre_counts_bar_chart_card3
+          type: Card
+          properties:
+            title: 
+          layout:
+            span: 16 
+          blocks:
+              - id: circle_example
+                type: Progress
+                properties:
+                  type: circle
+                  percent: 60
+                  strokeColor: '#52c41a'
+      - id: RatingSliderCard
+        type: Card
+        properties:
+          title: RatingSlider
+        layout:
+          span: 16 
+        blocks:
+        - id: RatingSliderBLock
+          type: RatingSlider
+          properties:
+            autoFocus: true
+            color: '#13c2c2'
+            label:
+              title: 'Nível de satisfação' 
+      - id: PageFooter
+        type: Html
+        properties:
+          html: > 
+            <div style="width: 66%; margin: auto; height: 100px;  background: #6b7d8c;">
+              <p style="margin-top: 20px; padding-top: 40px; font-size: 1.2em; text-align: center; color: white;">Desenvolvido por equipe &copy;<b>Simbiose Ventures</b></p>
+            </div> 

@@ -1,0 +1,145 @@
+
+lowdefy: 3.23.3
+name: Lowdefy starter
+
+types:
+  AgGridAlpine:
+    url: https://blocks-cdn.lowdefy.com/v3.12.3/blocks-aggrid/meta/AgGridAlpine.json
+
+connections:
+  - id: meta-tab # The connectionId that will be used when defining requests and mutations on our pages.
+    type: MongoDBCollection # The type of connection
+    properties:
+      databaseName: meta # The database name.
+      collection: meta.tab # The collection name.
+      databaseUri:
+        _secret: EXAMPLES_MDB # The database connection uri that is stored as a secret and accessed using the _secret operator.
+      write: true # Allows writes to the database. By default reads are allowed but writes are not.
+
+menus:
+  - id: default
+    links:
+      - id: welcome
+        type: MenuLink
+        properties:
+          icon: HomeOutlined
+          title: Home
+        pageId: welcome
+      # - id: test
+      #   type: MenuLink
+      #   properties:
+      #     icon: AlertOutlined
+      #     title: test
+      #   pageId: test
+      - id: list-blocks
+        type: MenuLink
+        properties:
+          icon: AlertOutlined
+          title: list-blocks
+        pageId: list-blocks
+      - id: cores
+        type: MenuLink
+        properties:
+          icon: AlertOutlined
+          title: cores
+        pageId: cores
+      - id: datas
+        type: MenuLink
+        properties:
+          icon: AlertOutlined
+          title: datas
+        pageId: datas
+      - id: datatable
+        type: MenuLink
+        properties:
+          icon: AlertOutlined
+          title: datatable
+        pageId: datatable
+      - id: formulario
+        type: MenuLink
+        properties:
+          icon: AlertOutlined
+          title: formulario
+        pageId: formulario
+      - id: menus
+        type: MenuLink
+        properties:
+          icon: AlertOutlined
+          title: menus
+        pageId: menus
+      - id: textos
+        type: MenuLink
+        properties:
+          icon: AlertOutlined
+          title: textos
+        pageId: textos
+      - id: template
+        type: MenuLink
+        properties:
+          icon: AlertOutlined
+          title: template
+        pageId: template
+      - id: meta-tab
+        type: MenuLink
+        properties:
+          icon: AlertOutlined
+          title: meta-tab
+        pageId: meta-tab
+pages:
+  - _ref: test.yaml
+  - _ref: list-blocks.yaml
+  - _ref: cores.yaml
+  - _ref: datas.yaml
+  - _ref: datatable.yaml
+  - _ref: formulario.yaml
+  - _ref: menus.yaml
+  - _ref: textos.yaml
+  - _ref: template.yaml
+  - _ref: meta-tab.yaml
+  # - _ref: brands.yaml
+  - id: welcome
+    type: PageHeaderMenu
+    properties:
+      title: Welcome
+    areas:
+      content:
+        justify: center
+        blocks:
+          - id: content_card
+            type: Card
+            style:
+              maxWidth: 800
+            blocks:
+              - id: content
+                type: Result
+                properties:
+                  title: Welcome to your Lowdefy app
+                  subTitle: We are excited to see what you are going to build
+                  icon:
+                    name: HeartTwoTone
+                    color: '#f00'
+                areas:
+                  extra:
+                    blocks:
+                      - id: docs_button
+                        type: Button
+                        properties:
+                          size: large
+                          title: Let's build something
+                          color: '#1890ff'
+                        events:
+                          onClick:
+                            - id: link_to_docs
+                              type: Link
+                              params:
+                                url: https://docs.lowdefy.com
+                                newTab: true
+      footer:
+        blocks:
+          - id: footer
+            type: Paragraph
+            properties:
+              type: secondary
+              content: |
+                Made by a Lowdefy 🤖
+
