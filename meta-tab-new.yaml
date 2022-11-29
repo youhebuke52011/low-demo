@@ -1,0 +1,14 @@
+id: meta-tab-new
+type: PageSiderMenu
+properties:
+  title: New Tab
+  logo:
+        src: https://i.postimg.cc/Qtn1P5zW/simbiose-Logo.png
+        style:
+          width: 10px;
+          margin: 10px 15px;
+          height: 100px;
+layout:
+  contentJustify: right
+  contentGutter: 16
+  size: 500

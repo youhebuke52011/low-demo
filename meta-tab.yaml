@@ -8,6 +8,10 @@ properties:
           width: 10px;
           margin: 10px 15px;
           height: 100px;
+layout:
+  contentJustify: center
+  contentGutter: 16
+  size: 500
 requests:
   # MongoDb Aggregation to get the product data.
   - id: all_tabs
@@ -17,23 +21,23 @@ requests:
       pipeline: # Here we can simply provide any valid MongoDB aggregation pipeline, like do a very basic sort.
         - $sort:
             _id: 1
-  - id: update_tabs
-    type: MongoDBUpdateOne # MongoDb updateOne request to update the selected product
-    connectionId: meta-tab
-    properties:
-      filter:
-        _id:
-          _state: edit_tab._id # Filter the document that matches the selected document's _id (which is nested in the edit_product object)
-      update:
-        $set:
-          name:
-            _state: edit_tab.name
-          brand_id:
-            _state: edit_tab.brand_id
-          description:
-            _state: edit_tab.description
-          updated_at:
-            _date: now
+  # - id: update_tabs
+  #   type: MongoDBUpdateOne # MongoDb updateOne request to update the selected product
+  #   connectionId: meta-tab
+  #   properties:
+  #     filter:
+  #       _id:
+  #         _state: edit_tab._id # Filter the document that matches the selected document's _id (which is nested in the edit_product object)
+  #     update:
+  #       $set:
+  #         name:
+  #           _state: edit_tab.name
+  #         brand_id:
+  #           _state: edit_tab.brand_id
+  #         description:
+  #           _state: edit_tab.description
+  #         updated_at:
+  #           _date: now
 
 events:
   onEnter:
@@ -46,14 +50,30 @@ events:
       params:
         tab_list:
           _request: all_tabs  
-   
-layout:
-  contentJustify: center
-  contentGutter: 16
-  size: 500
 areas:
   content:
     blocks:
+      - id: title # Create a Title block.
+        type: Title
+        layout:
+          grow: 1
+        properties:
+          content: Tab List
+          level: 2
+      - id: new_tab_button # Create a Button block to add a new brand.
+        type: Button
+        layout:
+          grow: 0 # Because the grow of the button is 0, it will not expand but remain in the same row as the title block.
+          # align: Left
+        properties:
+          title: New Tab # Button text.
+          icon: PlusOutlined # Ant Design icon on the button.
+        events:
+          onClick: # All the actions to complete when the button is clicked.
+            - id: link_to_new_tab # Link to the page where we will add a new brand.
+              type: Link
+              params:
+                pageId: meta-tab-new
       - id: tab_list
         type: List
         blocks:
@@ -82,214 +102,348 @@ areas:
                   level: 4
             events:
               onClick:
-                - id: set_edit_tab
-                  type: SetState
+                - id: link_to_edit_tab # Link to the page where we will edit the clicked brand.
+                  type: Link
                   params:
-                    edit_tab: 
-                      _state: tab_list.$.tab
-                - id: open_edit_tab # Open the drawer which contains the input fields to edit the selected product.
-                  type: CallMethod
-                  params:
-                    blockId: edit_tab_drawer
-                    method: toggleOpen
+                    pageId: meta-tab-edit # The page id of the edit brand page.
+                    urlQuery:
+                      id:
+                        _state: tab_list.$._id
+                # - id: set_edit_tab
+                #   type: SetState
+                #   params:
+                #     edit_tab: 
+                #       _state: tab_list.$.tab
+                # - id: open_edit_tab # Open the drawer which contains the input fields to edit the selected product.
+                #   type: CallMethod
+                #   params:
+                #     blockId: edit_tab_drawer
+                #     method: toggleOpen
 
-      - id: edit_tab_drawer
-        type: Drawer
-        properties:
-          title: Edit Tab
-          width: 1024
-        layout:
-          contentGutter: 16
-        blocks:
-          - id: edit_tab.tabId # A text input block to edit the product name.
-            type: TextInput
-            layout:
-              span: 12
-              # align: left
-            required: true
-            properties:
-              title: Tab Id
-              placeholder: Tab Id
-              disabled: true
-              label:
-                span: 10
-                align: center
-          - id: edit_tab.name # A text input block to edit the product name.
-            type: TextInput
-            layout:
-              span: 12
-            required: true
-            properties:
-              title: Name
-              placeholder: Tab Name
-              label:
-                span: 10
-                align: center
-          - id: edit_tab.SubTabsCard
-            type: Card
-            properties:
-              title: Sub Tabs
-            layout:
-              span: 26
-            blocks:
-            - id: edit_tab.subTabs
-              type: ControlledList
-              blocks:
-                # - id: edit_tab.subTabs.$
-                #   type: TitleInput
-                #   properties:
-                #     level: 1
-                - id: edit_tab.subTabs.$.name
-                  type: TextInput
-                  layout:
-                    span: 12
-                  required: true
-                  properties:
-                    title: First Name
-                    label:
-                      span: 10
-                      align: right                                    
-                - id: edit_tab.subTabs.$.url
-                  type: TextInput
-                  layout:
-                    span: 12
-                  required: true
-                  properties:
-                    title: First Name
-                    label:
-                      span: 10
-                      align: right
-                - id: edit_tab.subTabs.$.last_name
-                  type: TextInput
-                  layout:
-                    span: 12
-                  required: true
-                  properties:
-                    title: Last Name
-                    label:
-                      span: 10
-                      align: right
-                # - id: edit_tab.subTabs.$.date_of_birth
-                #   type: DateSelector
-                #   layout:
-                #     span: 12
-                #   required: true
-                #   properties:
-                #     title: Date of Birth
-                #     label:
-                #       span: 10
-                #       align: right
-                # - id: edit_tab.subTabs.$.email
-                #   type: TextInput
-                #   layout:
-                #     span: 12
-                #   required: true
-                #   properties:
-                #     title: Email address
-                #     label:
-                #       span: 10
-                #       align: right
-                # - id: edit_tab.subTabs.$.phone_number
-                  # type: TextInput
-                  # layout:
-                  #   span: 12
-                  # properties:
-                  #   title: Phone number
-                  #   label:
-                  #     span: 10
-                  #     align: right
-                - id: edit_tab.subTabs.$.preference
-                  type: ButtonSelector
-                  layout:
-                    span: 12
-                  properties:
-                    title: Preference
-                    label:
-                      span: 10
-                      align: right
-                    options:
-                      - Phone
-                      - Email             
-                - id: edit_tab.SubTabsCard.Object
-                  type: Card
-                  properties:
-                    title: Sub Object
-                  layout:
-                    span: 26
-                  blocks:
-                    - id: edit_tab.subTabs.$.object.name
-                      type: TextInput
-                      layout:
-                        span: 12
-                      required: true
-                      properties:
-                        title: Object Name
-                        label:
-                          span: 10
-                          align: right 
-                    - id: edit_tab.subTabs.$.object.url
-                      type: TextInput
-                      layout:
-                        span: 12
-                      required: true
-                      properties:
-                        title: Object Url
-                        label:
-                          span: 10
-                          align: right                          
-                - id: edit_tab.SubTabsCard.ListCard  
-                  type: Card
-                  properties:
-                    title: Sub Lists
-                  layout:
-                    span: 26
-                  blocks:
-                  - id: edit_tab.subTabs.list
-                    type: ControlledList
-                    blocks:
-                      - id: edit_tab.subTabs.$.list.$.name
-                        type: TextInput
-                        layout:
-                          span: 12
-                        required: true
-                        properties:
-                          title: First Name
-                          label:
-                            span: 10
-                            align: right  
-                      - id: edit_tab.subTabs.$.list.$.url
-                        type: TextInput
-                        layout:
-                          span: 12
-                        required: true
-                        properties:
-                          title: Url
-                          label:
-                            span: 10
-                            align: right 
-          - id: update_product_button
-            type: Button
-            layout:
-              grow: 3 # Make the update button 3 times the width of the delete button in the display css flex row
-            properties:
-              title: Save
-              icon: SaveOutlined
-              block: true
-            events:
-              onClick:
-                - id: update_tab # Call the update_product request to save the product changes.
-                  type: Request
-                  params: update_tab
-                - id: fetch_all_tabs # Refresh the all_products request to get the latest product details from the database.
-                  type: Request
-                  params: all_tabs
-                - id: set_tabs # Update the product_list array in state so that the page shows the latest product data.
-                  type: SetState
-                  params:
-                    tab_list:
-                      _request: all_tabs
-                - id: close_drawer # Close the edit_product drawer.
-                  type: CallMethod
-                  params:
-                    blockId: edit_tab_drawer
-                    method: toggleOpen                    
+      # - id: edit_tab_drawer
+      #   type: Drawer
+      #   properties:
+      #     title: Edit Tab
+      #     width: 1024
+      #   layout:
+      #     contentGutter: 16
+      #   blocks:
+      #     - id: edit_tab.tabId # A text input block to edit the product name.
+      #       type: NumberInput
+      #       layout:
+      #         span: 12
+      #         # align: left
+      #       required: true
+      #       properties:
+      #         title: Tab Id
+      #         placeholder: Tab Id
+      #         disabled: true
+      #         label:
+      #           span: 10
+      #           align: center
+      #     - id: edit_tab.name # A text input block to edit the product name.
+      #       type: TextInput
+      #       layout:
+      #         span: 12
+      #       required: true
+      #       properties:
+      #         title: Name
+      #         placeholder: Tab Name
+      #         label:
+      #           span: 10
+      #           align: center
+      #     - id: edit_tab.tabType # A text input block to edit the product name.
+      #       type: TextInput
+      #       layout:
+      #         span: 12
+      #       required: true
+      #       properties:
+      #         title: Tab Type
+      #         placeholder: Tab Type
+      #         label:
+      #           span: 10
+      #           align: center     
+      #     - id: edit_tab.selectIconUrl # A text input block to edit the product name.
+      #       type: TextInput
+      #       layout:
+      #         span: 12
+      #       required: true
+      #       properties:
+      #         title: selectIconUrl
+      #         placeholder: selectIconUrl
+      #         label:
+      #           span: 10
+      #           align: center
+      #     - id: edit_tab.unselectIconUrl # A text input block to edit the product name.
+      #       type: TextInput
+      #       layout:
+      #         span: 12
+      #       required: true
+      #       properties:
+      #         title: unselectIconUrl
+      #         placeholder: unselectIconUrl
+      #         label:
+      #           span: 10
+      #           align: center                           
+      #     - id: edit_tab.SubTabsCard
+      #       type: Card
+      #       properties:
+      #         title: Sub Tabs
+      #       layout:
+      #         span: 26
+      #       blocks:
+      #       - id: edit_tab.subTabs
+      #         type: ControlledList
+      #         blocks:
+      #           - id: edit_tab.subTabs.$.name
+      #             type: TextInput
+      #             layout:
+      #               span: 12
+      #             required: true
+      #             properties:
+      #               title: SubTab Name
+      #               label:
+      #                 span: 10
+      #                 align: right                                    
+      #           - id: edit_tab.subTabs.$.subId
+      #             type: NumberInput
+      #             layout:
+      #               span: 12
+      #             required: true
+      #             properties:
+      #               title: SubTab Id
+      #               disabled: true
+      #               label:
+      #                 span: 10
+      #                 align: right
+      #           - id: edit_tab.subTabs.$.index
+      #             type: NumberInput
+      #             layout:
+      #               span: 12
+      #             required: true
+      #             properties:
+      #               title: SubTab Index
+      #               label:
+      #                 span: 10
+      #                 align: right
+      #           # - id: edit_tab.subTabs.$.date_of_birth
+      #           #   type: DateSelector
+      #           #   layout:
+      #           #     span: 12
+      #           #   required: true
+      #           #   properties:
+      #           #     title: Date of Birth
+      #           #     label:
+      #           #       span: 10
+      #           #       align: right
+      #           - id: edit_tab.subTabs.ProductCard
+      #             type: Card
+      #             properties:
+      #               title: Sub Tabs Card
+      #             layout:
+      #               span: 26
+      #             blocks:
+      #             - id: edit_tab.subTabs.$.singleProducts
+      #               type: ControlledList
+      #               blocks:
+      #                 - id: edit_tab.subTabs.$.singleProducts.$.singleProductId
+      #                   type: TextInput
+      #                   layout:
+      #                     span: 12
+      #                   properties:
+      #                     title: Single Product Id
+      #                     label:
+      #                       span: 10
+      #                       align: right
+      #                 - id: edit_tab.subTabs.$.singleProducts.$.preference
+      #                   type: ButtonSelector
+      #                   layout:
+      #                     span: 12
+      #                   properties:
+      #                     title: Preference
+      #                     label:
+      #                       span: 10
+      #                       align: right
+      #                     options:
+      #                       - suit
+      #                       - single  
+      #                 - id: edit_tab.subTabs.ProductCard.SingleCard
+      #                   type: Card
+      #                   visible: 
+      #                     _not:
+      #                       _eq: 
+      #                         - _state: edit_tab.subTabs.$.singleProducts.$.preference
+      #                         - suit
+      #                     # _and:
+      #                     #   - _not:
+      #                     #       _eq:
+      #                     #         - _state: edit_tab.subTabs.$.preference
+      #                     #         - List
+      #                     #   - _state: edit_tab.subTabs.$.preference
+      #                   properties:
+      #                     title: Single Component
+      #                   layout:
+      #                     span: 26
+      #                   blocks:
+      #                     - id: edit_tab.subTabs.$.singleProducts.$.displayComponent.id
+      #                       type: NumberInput
+      #                       layout:
+      #                         span: 12
+      #                       required: true
+      #                       properties:
+      #                         title: Component Id
+      #                         label:
+      #                           span: 10
+      #                           align: right 
+      #                     - id: edit_tab.subTabs.$.singleProducts.$.displayComponent.typeId
+      #                       type: NumberInput
+      #                       layout:
+      #                         span: 12
+      #                       required: true
+      #                       properties:
+      #                         title: Component Type Id
+      #                         label:
+      #                           span: 10
+      #                           align: right
+      #                     - id: edit_tab.subTabs.$.singleProducts.$.displayComponent.name
+      #                       type: TextInput
+      #                       layout:
+      #                         span: 12
+      #                       required: true
+      #                       properties:
+      #                         title: Component Name
+      #                         label:
+      #                           span: 10
+      #                           align: right
+      #                     - id: edit_tab.subTabs.$.singleProducts.$.displayComponent.previewUrl
+      #                       type: TextInput
+      #                       layout:
+      #                         span: 12
+      #                       required: true
+      #                       properties:
+      #                         title: Component Preview Url
+      #                         label:
+      #                           span: 10
+      #                           align: right    
+      #                     - id: edit_tab.subTabs.$.singleProducts.$.displayComponent.url
+      #                       type: TextInput
+      #                       layout:
+      #                         span: 12
+      #                       required: true
+      #                       properties:
+      #                         title: Component Url
+      #                         label:
+      #                           span: 10
+      #                           align: right                                                                                       
+      #                     # - id: edit_tab.subTabs.$.object.colortype
+      #                     #   type: ButtonSelector
+      #                     #   layout:
+      #                     #     span: 12
+      #                     #   properties:
+      #                     #     title: Preference
+      #                     #     label:
+      #                     #       span: 10
+      #                     #       align: right
+      #                     #     options:
+      #                     #       - FK Color
+      #                     #       - MF Color                           
+      #                 - id: edit_tab.subTabs.ProductCard.SuitCard 
+      #                   type: Card
+      #                   visible: 
+      #                     _eq: 
+      #                       - _state: edit_tab.subTabs.$.singleProducts.$.preference
+      #                       - suit                  
+      #                   properties:
+      #                     title: Suit Component
+      #                   layout:
+      #                     span: 26
+      #                   blocks:
+      #                     - id: edit_tab.subTabs.$.singleProducts.$.suit.previewUrl
+      #                       type: TextInput
+      #                       layout:
+      #                         span: 12
+      #                       required: true
+      #                       properties:
+      #                         title: Preview Url
+      #                         label:
+      #                           span: 10
+      #                           align: right
+      #                     - id: edit_tab.subTabs.$.singleProducts.$.suit.displayComponents
+      #                       type: ControlledList
+      #                       blocks:
+      #                         - id: edit_tab.subTabs.$.singleProducts.$.suit.displayComponents.$.id
+      #                           type: NumberInput
+      #                           layout:
+      #                             span: 12
+      #                           required: true
+      #                           properties:
+      #                             title: Component Id
+      #                             label:
+      #                               span: 10
+      #                               align: right 
+      #                         - id: edit_tab.subTabs.$.singleProducts.$.suit.displayComponents.$.typeId
+      #                           type: NumberInput
+      #                           layout:
+      #                             span: 12
+      #                           required: true
+      #                           properties:
+      #                             title: Component Type Id
+      #                             label:
+      #                               span: 10
+      #                               align: right
+      #                         - id: edit_tab.subTabs.$.singleProducts.$.suit.displayComponents.$.name
+      #                           type: TextInput
+      #                           layout:
+      #                             span: 12
+      #                           required: true
+      #                           properties:
+      #                             title: Component Name
+      #                             label:
+      #                               span: 10
+      #                               align: right
+      #                         - id: edit_tab.subTabs.$.singleProducts.$.suit.displayComponents.$.previewUrl
+      #                           type: TextInput
+      #                           layout:
+      #                             span: 12
+      #                           required: true
+      #                           properties:
+      #                             title: Component Preview Url
+      #                             label:
+      #                               span: 10
+      #                               align: right    
+      #                         - id: edit_tab.subTabs.$.singleProducts.$.suit.displayComponents.$.url
+      #                           type: TextInput
+      #                           layout:
+      #                             span: 12
+      #                           required: true
+      #                           properties:
+      #                             title: Component Url
+      #                             label:
+      #                               span: 10
+      #                               align: right  
+      #     - id: update_product_button
+      #       type: Button
+      #       layout:
+      #         grow: 3 # Make the update button 3 times the width of the delete button in the display css flex row
+      #       properties:
+      #         title: Save
+      #         icon: SaveOutlined
+      #         block: true
+      #       events:
+      #         onClick:
+      #           - id: update_tab # Call the update_product request to save the product changes.
+      #             type: Request
+      #             params: update_tab
+      #           - id: fetch_all_tabs # Refresh the all_products request to get the latest product details from the database.
+      #             type: Request
+      #             params: all_tabs
+      #           - id: set_tabs # Update the product_list array in state so that the page shows the latest product data.
+      #             type: SetState
+      #             params:
+      #               tab_list:
+      #                 _request: all_tabs
+      #           - id: close_drawer # Close the edit_product drawer.
+      #             type: CallMethod
+      #             params:
+      #               blockId: edit_tab_drawer
+      #               method: toggleOpen                    
