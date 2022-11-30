@@ -1,0 +1,167 @@
+id: meta-component-new
+type: PageSiderMenu
+properties:
+  title: New Component
+  logo:
+        src: https://i.postimg.cc/Qtn1P5zW/simbiose-Logo.png
+        style:
+          width: 10px;
+          margin: 10px 15px;
+          height: 100px;
+layout:
+  contentJustify: right
+  contentGutter: 16
+  size: 500
+
+requests:
+  - id: component_find
+    type: MongoDBFind
+    connectionId: meta-component
+    properties:
+      query:
+        score:
+          $gt: 90
+      options:
+        sort:
+          - - score
+            - -1
+        limit: 10
+        projection:
+          score: 1
+          name: 1
+  - id: component_search
+    type: MongoDBAggregation
+    connectionId: meta-component
+    properties:
+      pipeline:
+        - $search:
+            compound:
+              should:
+                - wildcard:
+                    query:
+                      _string.concat:
+                        - '*'
+                        - _state: search_input
+                        - '*'
+                    path:
+                      - typeId
+                      - name
+                    allowAnalyzedField: true
+        - $addFields:
+            score:
+              $meta: searchScore
+        - $sort:
+            score: -1
+        - $limit: 10
+        - $project:
+            _id: 0
+            typeId: 1
+            name: 1
+            value: $typeId
+            label:
+              $concat:
+                - $_id
+                - ' - '
+                - $ifNull:
+                    - $name
+                    - ''
+
+areas:
+  content:
+    blocks:
+      - id: title # Create a Title block.
+        type: Title
+        properties:
+          content: Edit Component
+          level: 2
+      - id: typeId # A text input block to edit the product name.
+        type: NumberInput
+        layout:
+          span: 12
+          # align: left
+        required: true
+        properties:
+          title: Component Id
+          placeholder: Component Id
+          disabled: false
+          label:
+            span: 10
+            align: right
+      - id: online
+        type: Switch
+        required: true
+        layout:
+          span: 12
+        properties:
+          title: online
+          label:
+            span: 10
+            align: right
+      - id: necessary
+        type: Switch
+        required: true
+        layout:
+          span: 12
+        properties:
+          title: necessary
+          label:
+            span: 10
+            align: right
+      - id: name # A text input block to edit the product name.
+        type: TextInput
+        layout:
+          span: 12
+        required: true
+        properties:
+          title: Name
+          placeholder: Component Name
+          label:
+            span: 10
+            align: right
+      - id: conflictWithIds
+        type: MultipleSelector
+        layout:
+          span: 12
+        required: true
+        properties:
+          title: conflictWithIds
+          placeholder: Search
+          label:
+            span: 10
+            align: right
+          options:
+            _array.concat:
+              - _if_none:
+                  - _state: component_options
+                  - []
+              - _if_none:
+                  - _request: component_search
+                  - []
+        events:
+          onChange:
+            - id: set_state
+              type: SetState
+              params:
+                component_options:
+                  _mql.aggregate:
+                    'on':
+                      _array.concat:
+                        - _state: component_options
+                        - _request: component_search
+                    pipeline:
+                      - $match:
+                          value:
+                            $in:
+                              _state: conflictWithIds
+          onSearch:
+            debounce:
+              ms: 500
+            try:
+              - id: set_state
+                type: SetState
+                params:
+                  search_input:
+                    _event: value
+              - id: perform_search
+                type: Request
+                params: component_search

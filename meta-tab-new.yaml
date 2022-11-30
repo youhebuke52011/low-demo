@@ -12,3 +12,381 @@ layout:
   contentJustify: right
   contentGutter: 16
   size: 500
+
+areas:
+  content:
+    blocks:
+      - id: title # Create a Title block.
+        type: Title
+        properties:
+          content: Edit Tab
+          level: 2
+      - id: tab.tabId # A text input block to edit the product name.
+        type: NumberInput
+        layout:
+          span: 12
+          # align: left
+        required: true
+        properties:
+          title: Tab Id
+          placeholder: Tab Id
+          disabled: false
+          label:
+            span: 10
+            align: right
+      - id: online
+        type: Switch
+        required: true
+        layout:
+          span: 12
+        properties:
+          title: Online
+          label:
+            span: 10
+            align: right
+      - id: tab.name # A text input block to edit the product name.
+        type: TextInput
+        layout:
+          span: 12
+        required: true
+        properties:
+          title: Name
+          placeholder: Tab Name
+          label:
+            span: 10
+            align: right
+      - id: tab.tabType # A text input block to edit the product name.
+        type: TextInput
+        layout:
+          span: 12
+        required: true
+        properties:
+          title: Tab Type
+          placeholder: Tab Type
+          label:
+            span: 10
+            align: right     
+      - id: tab.selectIconUrl # A text input block to edit the product name.
+        type: TextArea
+        layout:
+          span: 12
+        required: true
+        properties:
+          title: selectIconUrl
+          placeholder: selectIconUrl
+          label:
+            span: 10
+            align: right
+      - id: tab.unselectIconUrl # A text input block to edit the product name.
+        type: TextArea
+        layout:
+          span: 12
+        required: true
+        properties:
+          title: unselectIconUrl
+          placeholder: unselectIconUrl
+          label:
+            span: 10
+            align: right                           
+      - id: tab.SubTabsCard
+        type: Card
+        properties:
+          title: Sub Tabs
+          level: 3
+        layout:
+          span: 26
+        blocks:
+        - id: tab.subTabs
+          type: ControlledList
+          blocks:
+            - id: tab.subTabs.$.name
+              type: TextInput
+              layout:
+                span: 12
+              required: true
+              properties:
+                title: SubTab Name
+                label:
+                  span: 10
+                  align: right                                    
+            - id: tab.subTabs.$.subId
+              type: NumberInput
+              layout:
+                span: 12
+              required: true
+              properties:
+                title: SubTab Id
+                disabled: false
+                label:
+                  span: 10
+                  align: right
+            - id: tab.subTabs.$.index
+              type: NumberInput
+              layout:
+                span: 12
+              required: true
+              properties:
+                title: SubTab Index
+                label:
+                  span: 10
+                  align: right
+            - id: tab.subTabs.ProductCard
+              type: Card
+              properties:
+                title: Sub Tabs Card
+              layout:
+                span: 26
+              blocks:
+              - id: tab.subTabs.$.singleProducts
+                type: ControlledList
+                blocks:
+                  - id: tab.subTabs.$.singleProducts.$.singleProductId
+                    type: TextInput
+                    required: true
+                    layout:
+                      span: 12
+                    properties:
+                      title: Single Product Id
+                      label:
+                        span: 10
+                        align: right
+                  - id: tab.subTabs.$.singleProducts.$.preference
+                    type: ButtonSelector
+                    required: true
+                    layout:
+                      span: 12
+                    properties:
+                      title: Preference
+                      label:
+                        span: 10
+                        align: right
+                      options:
+                        - suit
+                        - single  
+                  - id: tab.subTabs.ProductCard.SingleCard
+                    type: Card
+                    visible: 
+                      _not:
+                        _eq: 
+                          - _state: tab.subTabs.$.singleProducts.$.preference
+                          - suit
+                      # _and:
+                      #   - _not:
+                      #       _eq:
+                      #         - _state: tab.subTabs.$.preference
+                      #         - List
+                      #   - _state: tab.subTabs.$.preference
+                    properties:
+                      title: Single Component
+                    layout:
+                      span: 26
+                    blocks:
+                      - id: tab.subTabs.$.singleProducts.$.displayComponent.id
+                        type: NumberInput
+                        layout:
+                          span: 12
+                        required: true
+                        properties:
+                          title: Component Id
+                          label:
+                            span: 10
+                            align: right 
+                      - id: tab.subTabs.$.singleProducts.$.displayComponent.typeId
+                        type: NumberInput
+                        layout:
+                          span: 12
+                        required: true
+                        properties:
+                          title: Component Type Id
+                          label:
+                            span: 10
+                            align: right
+                      - id: tab.subTabs.$.singleProducts.$.displayComponent.name
+                        type: TextInput
+                        layout:
+                          span: 12
+                        required: true
+                        properties:
+                          title: Component Name
+                          label:
+                            span: 10
+                            align: right
+                      - id: tab.subTabs.$.singleProducts.$.displayComponent.previewUrl
+                        type: TextArea
+                        layout:
+                          span: 12
+                        required: true
+                        properties:
+                          title: Component Preview Url
+                          label:
+                            span: 10
+                            align: right    
+                      - id: tab.subTabs.$.singleProducts.$.displayComponent.url
+                        type: TextArea
+                        layout:
+                          span: 12
+                        required: true
+                        properties:
+                          title: Component Url
+                          label:
+                            span: 10
+                            align: right                                                                                       
+                      # - id: tab.subTabs.$.object.colortype
+                      #   type: ButtonSelector
+                      #   layout:
+                      #     span: 12
+                      #   properties:
+                      #     title: Preference
+                      #     label:
+                      #       span: 10
+                      #       align: right
+                      #     options:
+                      #       - FK Color
+                      #       - MF Color                           
+                  - id: tab.subTabs.ProductCard.SuitCard 
+                    type: Card
+                    visible: 
+                      _eq: 
+                        - _state: tab.subTabs.$.singleProducts.$.preference
+                        - suit                  
+                    properties:
+                      title: Suit Component
+                    layout:
+                      span: 26
+                    blocks:
+                      - id: tab.subTabs.$.singleProducts.$.suit.previewUrl
+                        type: TextArea
+                        layout:
+                          span: 12
+                        required: true
+                        properties:
+                          title: Preview Url
+                          label:
+                            span: 10
+                            align: right
+                      - id: tab.subTabs.$.singleProducts.$.suit.displayComponents
+                        type: ControlledList
+                        blocks:
+                          - id: tab.subTabs.$.singleProducts.$.suit.displayComponents.$.id
+                            type: NumberInput
+                            layout:
+                              span: 12
+                            required: true
+                            properties:
+                              title: Component Id
+                              label:
+                                span: 10
+                                align: right 
+                          - id: tab.subTabs.$.singleProducts.$.suit.displayComponents.$.typeId
+                            type: NumberInput
+                            layout:
+                              span: 12
+                            required: true
+                            properties:
+                              title: Component Type Id
+                              label:
+                                span: 10
+                                align: right
+                          - id: tab.subTabs.$.singleProducts.$.suit.displayComponents.$.name
+                            type: TextInput
+                            layout:
+                              span: 12
+                            required: true
+                            properties:
+                              title: Component Name
+                              label:
+                                span: 10
+                                align: right
+                          - id: tab.subTabs.$.singleProducts.$.suit.displayComponents.$.previewUrl
+                            type: TextArea
+                            layout:
+                              span: 12
+                            required: true
+                            properties:
+                              title: Component Preview Url
+                              label:
+                                span: 10
+                                align: right    
+                          - id: tab.subTabs.$.singleProducts.$.suit.displayComponents.$.url
+                            type: TextArea
+                            layout:
+                              span: 12
+                            required: true
+                            properties:
+                              title: Component Url
+                              label:
+                                span: 10
+                                align: right  
+      - id: insert_tab_button
+        type: Button
+        layout:
+          grow: 3 # Make the insert button 3 times the width of the delete button in the display css flex row
+        properties:
+          title: Save
+          icon: SaveOutlined
+          block: true
+        requests:
+          - id: insert_tab
+            type: MongoDBInsertOne # MongoDb insertOne request to insert the brand.
+            connectionId: meta-tab
+            properties:
+              doc:
+                tab: 
+                  tabId: 
+                    _state: tab.tabId
+                  name: 
+                    _state: tab.name
+                  tabType: 
+                    _state: tab.tabType
+                  selectIconUrl: 
+                    _state: tab.selectIconUrl
+                  unselectIconUrl: 
+                    _state: tab.unselectIconUrl
+                  subTabs: 
+                    _state: tab.subTabs
+                online:
+                  _state: online
+                created_at:
+                  _date: now
+                updated_at:
+                  _date: now
+              options:
+                forceServerObjectId: true
+
+                # tab.tabId:
+                #   _state: tab.tabId # Insert the brand name we set in state.
+                # tab.name:
+                #   _state: tab.name # Insert the description name we set in state.
+                # tab.tabType:
+                #   _state: tab.tabType
+                # tab.selectIconUrl:
+                #   _state: tab.selectIconUrl
+                # tab.unselectIconUrl:
+                #   _state: tab.unselectIconUrl
+                # tab.subTabs:
+                #   _state: tab.subTabs
+                
+        events:
+          onClick:
+            - id: insert_tab # Call the insert_product request to save the product changes.
+              type: Request
+              params: insert_tab
+            - id: link_to_tabs # When clicked, link back to the brands page.
+              type: Link
+              params:
+                pageId: meta-tab  
+      - id: back_button
+        type: Button
+        layout:
+          grow: 3 
+        properties:
+          title: Back
+          icon: ArrowLeftOutlined
+          type: default # Change the type of the button to default.
+          block: true # Makes the button fill the maximum defined width instead of only the with of its contents (title and icon).
+        events:
+          onClick:
+            - id: link_to_tabs # When clicked, link back to the brands page.
+              type: Link
+              params:
+                pageId: meta-tab

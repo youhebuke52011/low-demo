@@ -15,6 +15,14 @@ connections:
       databaseUri:
         _secret: EXAMPLES_MDB # The database connection uri that is stored as a secret and accessed using the _secret operator.
       write: true # Allows writes to the database. By default reads are allowed but writes are not.
+  - id: meta-component # The connectionId that will be used when defining requests and mutations on our pages.
+    type: MongoDBCollection # The type of connection
+    properties:
+      databaseName: meta # The database name.
+      collection: meta.appearance.component # The collection name.
+      databaseUri:
+        _secret: EXAMPLES_MDB # The database connection uri that is stored as a secret and accessed using the _secret operator.
+      write: true
 
 menus:
   - id: default
@@ -85,6 +93,12 @@ menus:
           icon: AlertOutlined
           title: meta-tab
         pageId: meta-tab
+      - id: meta-component
+        type: MenuLink
+        properties:
+          icon: AlertOutlined
+          title: meta-component
+        pageId: meta-component
 pages:
   - _ref: test.yaml
   - _ref: list-blocks.yaml
@@ -98,6 +112,9 @@ pages:
   - _ref: meta-tab.yaml
   - _ref: meta-tab-edit.yaml
   - _ref: meta-tab-new.yaml
+  - _ref: meta-component.yaml
+  # - _ref: meta-component-edit.yaml
+  - _ref: meta-component-new.yaml
   # - _ref: brands.yaml
   - id: welcome
     type: PageHeaderMenu

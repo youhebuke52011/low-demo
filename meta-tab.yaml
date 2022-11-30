@@ -9,7 +9,7 @@ properties:
           margin: 10px 15px;
           height: 100px;
 layout:
-  contentJustify: center
+  contentJustify: right
   contentGutter: 16
   size: 500
 requests:
@@ -20,25 +20,11 @@ requests:
     properties:
       pipeline: # Here we can simply provide any valid MongoDB aggregation pipeline, like do a very basic sort.
         - $sort:
+            updated_at: -1
+        - $project:
             _id: 1
-  # - id: update_tabs
-  #   type: MongoDBUpdateOne # MongoDb updateOne request to update the selected product
-  #   connectionId: meta-tab
-  #   properties:
-  #     filter:
-  #       _id:
-  #         _state: edit_tab._id # Filter the document that matches the selected document's _id (which is nested in the edit_product object)
-  #     update:
-  #       $set:
-  #         name:
-  #           _state: edit_tab.name
-  #         brand_id:
-  #           _state: edit_tab.brand_id
-  #         description:
-  #           _state: edit_tab.description
-  #         updated_at:
-  #           _date: now
-
+            tab.name: 1
+            online: 1
 events:
   onEnter:
     # Fetch the all_tabs request every time when a user enters the page.
@@ -84,22 +70,26 @@ areas:
               margin: 10
               padding: 10
             blocks:
-              # - id: tab_list.$.tab.tabId
-              #   type: TextInput
-              #   layout:
-              #     span: 12
-              #   required: true
-              #   properties:
-              #     title: Tab Id
-              #     label:
-              #       span: 10
-              #       align: right
               - id: tab_list.$.tab.name
                 type: Title
+                layout:
+                  span: 12 
                 properties:
                   content: 
                     _state: tab_list.$.tab.name
-                  level: 4
+                  level: 3
+                  label:
+                    span: 10
+                    align: right
+              - id: tab_list.$.online
+                type: Switch
+                layout:
+                  span: 12
+                properties:
+                  title: Online
+                  label:
+                    span: 10
+                    align: right
             events:
               onClick:
                 - id: link_to_edit_tab # Link to the page where we will edit the clicked brand.

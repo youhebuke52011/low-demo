@@ -56,6 +56,16 @@ areas:
           label:
             span: 10
             align: right
+      - id: online
+        type: Switch
+        required: true
+        layout:
+          span: 12
+        properties:
+          title: Online
+          label:
+            span: 10
+            align: right
       - id: tab.name # A text input block to edit the product name.
         type: TextInput
         layout:
@@ -359,8 +369,10 @@ areas:
                     _state: tab.unselectIconUrl
                   tab.subTabs:
                     _state: tab.subTabs
-                  # updated_at:
-                  #   _date: now
+                  online:
+                    _state: online
+                  updated_at:
+                    _date: now
         events:
           onClick:
             - id: update_tab # Call the update_product request to save the product changes.

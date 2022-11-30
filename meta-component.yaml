@@ -1,0 +1,102 @@
+id: meta-component
+type: PageSiderMenu
+properties:
+  title: List Blocks
+  logo:
+        src: https://i.postimg.cc/Qtn1P5zW/simbiose-Logo.png
+        style:
+          width: 10px;
+          margin: 10px 15px;
+          height: 100px;
+layout:
+  contentJustify: right
+  contentGutter: 16
+  size: 500
+requests:
+  # MongoDb Aggregation to get the product data.
+  - id: all_components
+    type: MongoDBAggregation 
+    connectionId: meta-component # Id of the connection defined in the lowdefy.yaml file.
+    properties:
+      pipeline: # Here we can simply provide any valid MongoDB aggregation pipeline, like do a very basic sort.
+        - $sort:
+            updated_at: -1
+        - $project:
+            _id: 1
+            name: 1
+            online: 1
+events:
+  onEnter:
+    # Fetch the all_components request every time when a user enters the page.
+    - id: fetch_components  
+      type: Request
+      params: all_components
+    - id: set_components
+      type: SetState
+      params:
+        component_list:
+          _request: all_components 
+
+areas:
+  content:
+    blocks:
+      - id: title # Create a Title block.
+        type: Title
+        layout:
+          grow: 1
+        properties:
+          content: Component List
+          level: 2
+      - id: new_component_button # Create a Button block to add a new brand.
+        type: Button
+        layout:
+          grow: 0 # Because the grow of the button is 0, it will not expand but remain in the same row as the title block.
+          # align: Left
+        properties:
+          title: New Component # Button text.
+          icon: PlusOutlined # Ant Design icon on the button.
+        events:
+          onClick: # All the actions to complete when the button is clicked.
+            - id: link_to_new_component # Link to the page where we will add a new brand.
+              type: Link
+              params:
+                pageId: meta-component-new
+      - id: component_list
+        type: List
+        blocks:
+          - id: component_list.$.container # Wrap all the blocks for a brand item in a box.
+            type: Box
+            style:
+              background: '#fff' # Give the box a white background and some spacing.
+              margin: 10
+              padding: 10
+            blocks:
+              - id: component_list.$.name
+                type: Title
+                layout:
+                  span: 12 
+                properties:
+                  content: 
+                    _state: component_list.$.name
+                  level: 3
+                  label:
+                    span: 10
+                    align: right
+              - id: component_list.$.online
+                type: Switch
+                layout:
+                  span: 12
+                properties:
+                  title: Online
+                  label:
+                    span: 10
+                    align: right
+            events:
+              onClick:
+                - id: link_to_edit_component # Link to the page where we will edit the clicked brand.
+                  type: Link
+                  params:
+                    pageId: meta-component-edit # The page id of the edit brand page.
+                    urlQuery:
+                      id:
+                        _state: component_list.$._id
